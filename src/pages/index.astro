@@ -14,17 +14,17 @@ const projects = Object.values(projectModules).map((module) => module.project);
 		<img 
 			src="https://avatars.githubusercontent.com/acemavrick" 
 			alt="Shubh Randeria profile picture" 
-			class="w-32 h-32 rounded-full"
+			class="w-32 h-32 rounded-full ring-2 ring-slate-300 dark:ring-slate-700"
 			loading="lazy"
 		/>
 	</div>
 	<h1 class="text-center">Shubh Randeria</h1>
 	<span class="flex justify-center gap-2">
-		<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/github.svg" logo_name="Github Logo" link="https://github.com/acemavrick" name="Github" />
+		<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/github.svg" logo_name="Github Logo" link="https://github.com/acemavrick" name="GitHub" />
 		<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/googlephotos.svg" logo_name="Google Photos Logo" link="https://photos.app.goo.gl/GhLWSijcDZX3JsqF7" name="Photo Album" />
 	</span>
 
-	<div class="grid gap-6">
+	<div class="grid gap-6 mt-6">
 		{projects.map((project, index) => (
 			<ProjectCard project={project} handedness={(index + 1) % 2 === 0 ? 'left' : 'right'} />
 		))}
