@@ -1,0 +1,16 @@
+---
+interface Props {
+  logo_link: string;
+  logo_name: string;
+  link: string;
+  name: string;
+}
+
+const { logo_link, logo_name, link, name } = Astro.props;
+---
+
+<a href={link} target="_blank" rel="noopener noreferrer" 
+class="not-prose inline-flex items-center self-start leading-none bg-blue-200 text-black ring ring-teal-800 text-xs px-2 py-1 rounded cursor-pointer gap-1">
+  <img src={logo_link} alt={logo_name} class="block w-4 h-4 shrink-0" />
+  {name}
+</a>

@@ -1,0 +1,21 @@
+---
+import '../styles/global.css';
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<link rel="icon" type="image/svg+xml" href="https://avatars.githubusercontent.com/acemavrick" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="my-8 w-full bg-sky-50 mx-auto prose dark:prose-invert px-4 sm:px-6 md:max-w-2xl lg:max-w-4xl xl:max-w-5xl">
+		<!-- todo theme (dark/light) toggle -->
+		<slot />
+	</body>
+</html>
