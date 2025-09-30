@@ -9,8 +9,16 @@ interface Props {
 const { logo_link, logo_name, link, name } = Astro.props;
 ---
 
-<a href={link} target="_blank" rel="noopener noreferrer" 
-class="not-prose inline-flex items-center self-start leading-none bg-blue-200 dark:bg-blue-900/40 text-black dark:text-blue-200 ring ring-teal-800 dark:ring-teal-600/60 text-xs px-2 py-1 rounded cursor-pointer gap-1">
-  <img src={logo_link} alt={logo_name} class="block w-4 h-4 shrink-0 dark:invert" />
+<a 
+  href={link} 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  class="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-neutral-300 dark:border-neutral-700 hover:border-sky-400 dark:hover:border-sky-600 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm text-neutral-700 dark:text-neutral-300 hover:text-sky-600 dark:hover:text-sky-400 text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-md"
+>
+  <img 
+    src={logo_link} 
+    alt={logo_name} 
+    class="w-4 h-4 dark:invert transition-transform group-hover:rotate-6" 
+  />
   {name}
 </a>
