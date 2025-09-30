@@ -1,2 +1,69 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+/* smooth animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth antialiased;
+  }
+  
+  body {
+    @apply relative overflow-x-hidden;
+  }
+  
+  /* subtle animated gradient orbs in background */
+  body::before {
+    content: '';
+    @apply fixed top-0 left-0 w-full h-full -z-10 opacity-40;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(20, 184, 166, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.08) 0%, transparent 50%);
+    animation: gradient-x 20s ease infinite;
+    background-size: 200% 200%;
+  }
+}
+
+/* custom gradient text utilities */
+@layer utilities {
+  .text-gradient-sky {
+    @apply bg-gradient-to-r from-sky-500 to-teal-400 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-rose {
+    @apply bg-gradient-to-r from-rose-500 to-pink-400 bg-clip-text text-transparent;
+  }
+  
+  .border-gradient {
+    border-image: linear-gradient(135deg, rgb(14, 165, 233), rgb(20, 184, 166)) 1;
+  }
+}
