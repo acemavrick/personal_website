@@ -1,7 +1,24 @@
 ---
 import '../styles/global.css';
 
-const { title } = Astro.props;
+interface Props {
+	title: string;
+	description?: string;
+	keywords?: string;
+	author?: string;
+	image?: string;
+}
+
+const { 
+	title,
+	description = "Shubh Randeria - Developer and student passionate about building elegant solutions. Portfolio featuring projects in Python, Swift, and web development.",
+	keywords = "Shubh Randeria, developer, software engineer, portfolio, Python, Swift, web development, GitHub",
+	author = "Shubh Randeria",
+	image = "https://avatars.githubusercontent.com/acemavrick"
+} = Astro.props;
+
+const siteUrl = "https://randeria.dev";
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
 ---
 
 <!DOCTYPE html>
@@ -10,9 +27,43 @@ const { title } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="color-scheme" content="light dark" />
+		
+		<!-- seo meta tags -->
+		<meta name="description" content={description} />
+		<meta name="keywords" content={keywords} />
+		<meta name="author" content={author} />
+		<link rel="canonical" href={canonicalURL} />
+		
+		<!-- open graph for social sharing -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={image} />
+		
+		<!-- twitter card -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={image} />
+		
 		<link rel="icon" type="image/svg+xml" href="https://avatars.githubusercontent.com/acemavrick" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		
+		<!-- structured data for search engines -->
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Person",
+			"name": "Shubh Randeria",
+			"url": siteUrl,
+			"image": image,
+			"sameAs": [
+				"https://github.com/acemavrick"
+			],
+			"jobTitle": "Developer",
+			"description": description
+		})} />
 	</head>
 	<body class="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors duration-300">
 		<main class="mx-auto max-w-5xl px-6 py-12 md:py-20">
