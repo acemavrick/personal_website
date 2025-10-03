@@ -6,4 +6,5 @@ export interface Project {
   image?: string;
   image_alt?: string;
   image_fit?: "contain" | "cover" | "fill" | "none" | "scale-down";
+  variant?: "comingSoon" | "default";
 }
