@@ -7,6 +7,15 @@ import type { Project } from '../types/project';
 const projectModules = import.meta.glob<{project: Project}>('../projects/*.astro', { eager: true });
 const projects = Object.values(projectModules).map((module) => module.project);
 
+// Explicit "coming soon" card to always render at the bottom
+const comingSoonProject: Project = {
+    title: "New releases on the horizon",
+    description:
+        "Fresh, thoughtfully crafted projects are underway and will debut here as soon as they’re polished and production‑ready.",
+    url: "",
+    tags: ["In Progress"]
+};
+
 ---
 
 <Base 
@@ -49,10 +58,11 @@ const projects = Object.values(projectModules).map((module) => module.project);
 			<div class="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent"></div>
 		</div>
 		
-		<div class="space-y-8">
-			{projects.map((project, index) => (
-				<ProjectCard project={project} index={index} />
-			))}
-		</div>
+        <div class="space-y-8">
+            {projects.map((project, index) => (
+                <ProjectCard project={project} index={index} />
+            ))}
+            <ProjectCard project={comingSoonProject} index={projects.length} />
+        </div>
 	</section>
 </Base>
