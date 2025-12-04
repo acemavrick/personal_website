@@ -53,6 +53,9 @@
 
 /* custom gradient text utilities */
 @layer utilities {
+  .text-gradient-title {
+    @apply bg-gradient-to-r from-orange-400 to-rose-500 bg-clip-text text-transparent;
+  }
   .text-gradient-sky {
     @apply bg-gradient-to-r from-sky-500 to-teal-400 bg-clip-text text-transparent;
   }
