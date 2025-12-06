@@ -1,67 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import SocialTag from '../components/SocialTag.astro';
-import type { Project } from '../types/project';
-
-const projectModules = import.meta.glob<{project: Project}>('../projects/*.astro', { eager: true });
-const projects = Object.values(projectModules).map((module) => module.project);
-
-// Explicit "coming soon" card to always render at the bottom
-const comingSoonProject: Project = {
-    title: "New releases on the horizon",
-    description:
-        "Fresh, thoughtfully crafted projects are underway and will debut here as soon as they're polished and production‑ready.",
-    url: ""
-};
-
+import Image from 'astro/components/Image.astro';
+import wfPreview from '../assets/wf-preview.png';
 ---
 
-<Base 
-	title="Shubh Randeria"
-	description="Shubh Randeria's portfolio showcasing projects including UIL-DL, Wavefunction Screensaver, and more."
-	keywords="Metal Shading Language, acemavrick, portfolio, developer, Python, Swift, macOS development, UIL-DL, Wavefunction Screensaver"
->
-	<!-- header section -->
-	<header class="mb-16 text-center space-y-6">
-		<div class="inline-block relative group">
-			<div class="absolute -inset-1 bg-gradient-to-r from-sky-400 via-teal-400 to-rose-400 rounded-full opacity-30 group-hover:opacity-50 blur transition duration-500"></div>
-			<img 
-				src="https://avatars.githubusercontent.com/acemavrick" 
-				alt="Shubh Randeria profile picture" 
-				class="relative w-28 h-28 rounded-full border-2 border-neutral-800 transition-transform duration-300 hover:scale-105"
-				loading="lazy"
-			/>
-		</div>
-		
-		<div class="space-y-3">
-			<h1 class="text-4xl md:text-5xl font-bold tracking-tight">
-				<span class="text-gradient-title">Shubh Randeria</span>
-			</h1>
-			<!-- <p class="text-lg text-neutral-400 max-w-2xl mx-auto">
-				Developer passionate about building elegant solutions and exploring creative intersections of technology and design.
-			</p> -->
-		</div>
-		
-		<div class="flex justify-center gap-3 pt-2">
-			<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/github.svg" logo_name="Github Logo" link="https://github.com/acemavrick" name="GitHub" />
-			<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/googlephotos.svg" logo_name="Google Photos Logo" link="https://photos.app.goo.gl/GhLWSijcDZX3JsqF7" name="Photo Album" />
-		</div>
-	</header>
-
-	<!-- projects section -->
-	<section class="space-y-6">
-		<div class="flex items-center gap-3 mb-8">
-			<div class="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-700 to-transparent"></div>
-			<h2 class="text-sm font-semibold tracking-wider uppercase text-neutral-400">Featured Work</h2>
-			<div class="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-700 to-transparent"></div>
-		</div>
-		
-        <div class="space-y-8">
-            {projects.map((project, index) => (
-                <ProjectCard project={project} index={index} />
-            ))}
-            <ProjectCard project={comingSoonProject} index={projects.length} />
-        </div>
-	</section>
+<Base title="Shubh Randeria" description="Shubh Randeria's portfolio">
+	<div class="flex flex-col items-center justify-center">
+		<Image src="https://avatars.githubusercontent.com/acemavrick" alt="Shubh Randeria" width={100} height={100} class="rounded-full ring-2" />
+		<h1 class="text-4xl font-bold mt-4">Hello World</h1>
+		<p>This is the preview branch of my website on which I will be completely remaking the website.
+			The actual website is on the <a class="text-green-500 hover:text-blue-200" href="https://randeria.dev">main branch</a>.
+		</p>
+		<p>Go to <a class="text-green-500 hover:text-blue-200" href="projects/example">projects/example</a> to see a preview of the page I'll use to show project details.</p>
+	</div>
 </Base>
