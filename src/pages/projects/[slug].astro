@@ -1,0 +1,43 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import TechTag from "../../components/TechTag.astro";
+
+export async function getStaticPaths() {
+    const projects = await getCollection("projects");
+
+    return projects.map((proj) => ({
+        params: { slug: proj.slug || proj.id.replace(/\.mdx?$/, "") },
+        props: { project: proj },
+    }));
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await project.render();
+---
+
+<style>
+    @import "tailwindcss";
+
+    body {
+        @apply bg-radial-[at_0%_0%] 
+        to-zinc-800 from-60% from-zinc-950;
+    }
+</style>
+
+<Base title={data.title}>
+    <article class="max-w-4xl mx-auto py-12 md:py-20 px-6 md:px-8">
+        <header class="mb-16 flex flex-col gap-6">
+            <h1 class="text-4xl md:text-5xl font-bold">{data.title}</h1>
+            <div class="flex flex-wrap gap-3">
+                {data.tech.map((tech) => <TechTag {tech} />)}
+            </div>
+            <p class="text-lg md:text-xl text-neutral-300 max-w-prose leading-relaxed">{data.summary}</p>
+        </header>
+
+        <section class="prose prose-lg prose-invert max-w-none prose-headings:mt-12 prose-headings:mb-6 prose-p:leading-relaxed">
+            <Content />
+        </section>
+    </article>
+</Base>
