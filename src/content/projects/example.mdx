@@ -1,0 +1,113 @@
+---
+title: "How This Portfolio Actually Works"
+date: "Right Now"
+tech: ["Python", "TypeScript", "Swift", "Java", "Other"]
+summary: "A meta journey through this very portfolio's architecture. Follow along as we explore content collections, dynamic routing, tech tags, and the magic that turns MDX files into beautiful project pages."
+---
+
+## The Beginning: A File is Born
+
+Once upon a time in the `/src/content/projects/` directory, a humble MDX file was created. That file is **this very page you're reading right now**. At the top, wrapped in triple dashes, lives the frontmatter—a YAML block containing metadata like `title`, `date`, `tech`, and `summary`.
+
+This frontmatter isn't just decoration. It's validated by a schema defined in `content.config.ts` using Zod:
+
+```typescript
+const projects = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    tech: z.array(z.string()),
+    summary: z.string(),
+  }),
+});
+```
+
+If invalid data gets added, Astro throws errors during build. Type safety in content? *Chef's kiss*.
+
+## The Journey: From Slug to Page
+
+Here's where it gets interesting. The filename of this MDX file (let's say `example.mdx`) becomes its **slug**. When you navigate to `/projects/example`, Astro's dynamic routing kicks in.
+
+The `[slug].astro` file in `/src/pages/projects/` is doing the heavy lifting:
+
+1. **getStaticPaths()** runs at build time
+2. It fetches all projects using `getCollection("projects")`
+3. Each project gets mapped to a route based on its filename
+4. The MDX content gets rendered into beautiful HTML
+
+It's like a factory assembly line, but for web pages:
+
+```
+example.mdx → slug: "example" → /projects/example → this page!
+```
+
+## The Tech Tags: Colorful Companions
+
+Notice those colorful pill-shaped tags at the top? Each technology in the `tech` array gets its own `<TechTag>` component. The component looks at the tech name and assigns it a color:
+
+- Languages like Python and TypeScript get specific colors
+- Frameworks like React and Svelte get their own hues  
+- Everything else gets a default neutral style
+
+Adding something like `["Rust", "Go", "Swift"]` to the frontmatter makes the tags adapt automatically. It's like a chameleon, but for code.
+
+### How Tags Know Their Colors
+
+The `TechTag.astro` component uses a simple mapping system. When it sees "TypeScript", it knows to render a blue tag. When it encounters "Python", out comes yellow. This makes your tech stack instantly recognizable at a glance.
+
+## The Content: MDX Superpowers
+
+Below the frontmatter, regular markdown can be written—**bold text**, *italics*, `inline code`, headings, lists, the works. But MDX takes it further: HTML and even React components can be mixed in (though this example sticks to vanilla markdown).
+
+Want a gradient text effect? Just sprinkle in some Tailwind:
+
+<span class="bg-clip-text bg-linear-to-r from-rose-500 via-green-500 to-orange-500 text-transparent font-bold text-xl"
+>Look at me, I'm a gradient!</span>
+
+import rose from '/rose.txt?raw';
+
+<pre class="not-prose whitespace-pre leading-[1.05] bg-conic from-rose-500 via-blue-500 to-orange-500 text-transparent bg-clip-text font-mono overflow-x-scroll scroll-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden" 
+style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;" 
+set:html={rose} />
+
+<span class="block mt-6 text-xs text-neutral-500">
+  <b>ASCII art by Joan G. Stark (found on <a class="text-neutral-400 hover:text-neutral-300" href="https://www.asciiart.eu/" target="_blank" rel="noopener noreferrer">asciiart.eu</a>)</b>
+</span>
+
+
+The prose styling from Tailwind Typography makes everything readable automatically. Headers get proper spacing, paragraphs breathe, code blocks shine.
+
+## The Styling: Layers of Beauty
+
+When the MDX renders, it's wrapped in a `<Base>` layout that provides:
+
+1. A radial gradient background fading from zinc-800 to zinc-950
+2. Responsive padding and max-width constraints
+3. The prose classes that make typography beautiful
+4. Syntax highlighting for code blocks
+
+The content lives in an `<article>` tag with careful spacing, so everything from the `h1` title down to the last paragraph has room to breathe.
+
+## How New Projects Get Added
+
+Creating a new project page is surprisingly simple:
+
+1. A new `.mdx` file gets dropped in `/src/content/projects/`
+2. The required frontmatter gets added (title, date, tech, summary)
+3. Content gets written using markdown
+4. The file gets saved—Astro's dev server hot-reloads
+5. The page appears at `/projects/filename`
+
+No database. No CMS. No build configuration. Just **write and ship**.
+
+## The Grand Finale
+
+And that's the story of how a simple MDX file becomes a full-fledged project page. From content collections to dynamic routes to styled components—it's a beautiful dance of static site generation.
+
+The best part? This entire system is type-safe, version-controlled, and infinitely customizable. Adding a `github` field to the schema? Just update `content.config.ts`. Custom components in MDX? Import them directly. The possibilities are endless.
+
+And that's the magic behind these project pages—simple files transformed into beautiful documentation.
+
+
+<span class="text-xs text-neutral-400"
+>Yes, this page's content is AI-generated. I was <b>not</b> going to write all of this.</span>
