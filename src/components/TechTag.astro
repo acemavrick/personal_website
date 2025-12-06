@@ -1,0 +1,55 @@
+---
+interface Props {
+    tech: string;
+}
+
+const { tech } = Astro.props;
+
+const supported = [
+    "python",
+    "swift",
+    "typescript",
+    "java",
+]
+
+let color = "default";
+const lowerTech = tech.toLowerCase();
+
+if (supported.includes(lowerTech)) {
+    color = lowerTech;
+}
+
+const colorClass = `tech-${color}`;
+---
+
+<style>
+    @import "tailwindcss";
+
+    .tech-default {
+        @apply bg-linear-to-r from-neutral-600/40 to-neutral-800/40;
+    }
+
+    .tech-python {
+        @apply bg-linear-to-r from-green-700/40 to-green-900/40;
+    }
+
+    .tech-swift {
+        @apply bg-linear-to-r from-orange-700/40 to-red-900/40;
+    }
+
+    .tech-typescript {
+        @apply bg-linear-to-r from-blue-800/40 to-indigo-900/40;
+    }
+
+    .tech-java {
+        @apply bg-linear-to-r from-amber-700/40 to-red-800/40;
+    }
+</style>
+
+<span class={`${colorClass} bg-stone-800 px-3 py-1 
+ring-1 ring-neutral-700
+rounded-full
+text-xs font-extrabold`}>
+    <span class={"text-neutral-100/80"}>
+        {tech}</span>
+</span>
