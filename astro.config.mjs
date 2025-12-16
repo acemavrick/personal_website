@@ -10,6 +10,9 @@ import mdx from '@astrojs/mdx';
 export default defineConfig({
   site: 'https://randeria.dev',
   integrations: [sitemap(), mdx()],
+  // image: {
+  //   domains: []
+  // },
   vite: {
     plugins: [tailwindcss()]
   }
