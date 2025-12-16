@@ -1,0 +1,55 @@
+---
+// component for displaying a project card
+import TechTag from "./TechTag.astro";
+import { getEntry } from "astro:content";
+
+const { name } = Astro.props;
+
+const project = await getEntry("projects", name);
+if (!project) throw new Error(`Project "${name}" not found.`);
+
+const { title, date, tech, summary } = project.data;
+---
+
+<article class="project-card relative p-6 rounded-2xl border border-white/10 bg-neutral-900/50 backdrop-blur-sm transition-all duration-300">
+    <div class="flex flex-col gap-4">
+        <!-- header -->
+        <div class="flex items-start justify-between gap-4">
+            <h3 class="text-xl font-semibold bg-linear-to-br from-white to-neutral-400 bg-clip-text text-transparent">
+                {title}
+            </h3>
+            <time class="text-xs text-neutral-500 whitespace-nowrap pt-1">{date}</time>
+        </div>
+
+        <!-- tech stack -->
+        <div class="flex flex-wrap gap-2">
+            {tech.map((t) => <TechTag tech={t} />)}
+        </div>
+
+        <!-- summary -->
+        <p class="text-sm text-neutral-400 leading-relaxed">{summary}</p>
+
+        <!-- link -->
+        <a 
+            href={`/projects/${name}`} 
+            class="project-link inline-flex items-center gap-2 text-sm text-neutral-400 transition-colors duration-200 hover:text-white w-fit"
+        >
+            <span>View Project</span>
+            <svg class="arrow size-4 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+        </a>
+    </div>
+</article>
+
+<style>
+    .project-card:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.4);
+    }
+
+    .project-link:hover .arrow {
+        transform: translateX(4px);
+    }
+</style>

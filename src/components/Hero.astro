@@ -3,7 +3,11 @@
 import { Image } from 'astro:assets';
 
 const name = "Shubh Randeria";
-const tagline = "Hello world! My name is Shubh.";
+const tagline = `Hello! My name is Shubh. 
+This is a preview branch of my website that is under active and frequent development.
+As such, it is not fully functional and may contain incorrect information.
+Feel free to give feedback (my socials are linked below) and you can also check out
+the actual website located at <a href="https://randeria.dev">randeria.dev</a>.`;
 
 const github = "acemavrick";
 const youtubeURL = "https://www.youtube.com/channel/UCv9H6UivmaxVSGd0ayGwV7w";
@@ -41,7 +45,7 @@ const socials = [
 		<div class="fade-up delay-2 w-12 h-px bg-linear-to-r from-transparent via-white/40 to-transparent"></div>
 
 		<!-- tagline -->
-		<p class="fade-up delay-3 text-lg text-neutral-400 tracking-wide">{tagline}</p>
+		<p class="fade-up delay-3 text-lg text-neutral-400 tracking-wide" set:html={tagline}></p>
 
 		<!-- social links -->
 		<nav class="fade-up delay-4 flex flex-col sm:flex-row flex-wrap justify-center gap-3 mt-2" aria-label="Social links">
@@ -81,22 +85,6 @@ const socials = [
 </section>
 
 <style>
-	/* fade-up entrance animation */
-	@keyframes fade-up {
-		from { opacity: 0; transform: translateY(12px); }
-		to { opacity: 1; transform: translateY(0); }
-	}
-
-	.fade-up {
-		opacity: 0;
-		animation: fade-up 0.6s ease-out forwards;
-	}
-
-	.delay-1 { animation-delay: 100ms; }
-	.delay-2 { animation-delay: 200ms; }
-	.delay-3 { animation-delay: 300ms; }
-	.delay-4 { animation-delay: 400ms; }
-
 	/* avatar hover effect */
 	.avatar-wrapper {
 		position: relative;
