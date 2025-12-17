@@ -5,33 +5,66 @@
   html {
     @apply scroll-smooth antialiased;
   }
+
+  /* smoother text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* selection color */
+  ::selection {
+    @apply bg-emerald-500/30 text-white;
+  }
 }
 
 @layer components {
   .paragraph-section {
-    @apply text-neutral-300 leading-relaxed max-w-prose;
+    @apply text-neutral-200 leading-relaxed max-w-prose;
   }
 
+  /* link colors - emerald accent */
   a {
-    @apply text-green-400 hover:text-yellow-400;
+    @apply text-emerald-400 hover:text-emerald-300 transition-all duration-300;
+  }
+
+  /* prose customization for project detail pages */
+  .prose {
+    @apply prose-a:text-emerald-400 prose-a:hover:text-emerald-300 prose-a:no-underline prose-a:hover:underline;
+    @apply prose-headings:text-neutral-100 prose-p:text-neutral-200;
+    @apply prose-strong:text-white;
+    @apply prose-code:text-emerald-300 prose-code:bg-white/5 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-white/10;
+    @apply prose-pre:bg-neutral-900/80 prose-pre:border prose-pre:border-white/10 prose-pre:backdrop-blur-sm;
+    @apply prose-blockquote:border-emerald-500/50 prose-blockquote:text-neutral-300 prose-blockquote:bg-white/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1;
+    @apply prose-img:rounded-xl prose-img:shadow-2xl prose-img:border prose-img:border-white/10;
+    @apply prose-hr:border-white/10;
   }
 
   /* fade-up entrance animation */
   .fade-up {
     opacity: 0;
-    animation: fade-up 0.6s ease-out forwards;
+    animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  .delay-1 { animation-delay: 100ms; }
-  .delay-2 { animation-delay: 200ms; }
-  .delay-3 { animation-delay: 300ms; }
-  .delay-4 { animation-delay: 400ms; }
-  .delay-5 { animation-delay: 500ms; }
-  .delay-6 { animation-delay: 600ms; }
-  .delay-7 { animation-delay: 700ms; }
+  .delay-1 { animation-delay: 80ms; }
+  .delay-2 { animation-delay: 160ms; }
+  .delay-3 { animation-delay: 240ms; }
+  .delay-4 { animation-delay: 320ms; }
+  .delay-5 { animation-delay: 400ms; }
+  .delay-6 { animation-delay: 480ms; }
+  .delay-7 { animation-delay: 560ms; }
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+    filter: blur(4px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+    filter: blur(0);
+  }
 }

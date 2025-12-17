@@ -5,51 +5,52 @@ interface Props {
 
 const { tech } = Astro.props;
 
-const supported = [
-    "python",
-    "swift",
-    "typescript",
-    "java",
-]
+// color mapping for tech tags
+const colorMap: Record<string, { bg: string; border: string; text: string; glow: string }> = {
+    python: { 
+        bg: "from-emerald-500/20 to-green-600/10", 
+        border: "border-emerald-500/30", 
+        text: "text-emerald-300",
+        glow: "shadow-emerald-500/20"
+    },
+    swift: { 
+        bg: "from-orange-500/20 to-red-500/10", 
+        border: "border-orange-500/30", 
+        text: "text-orange-300",
+        glow: "shadow-orange-500/20"
+    },
+    typescript: { 
+        bg: "from-blue-500/20 to-indigo-500/10", 
+        border: "border-blue-500/30", 
+        text: "text-blue-300",
+        glow: "shadow-blue-500/20"
+    },
+    java: { 
+        bg: "from-amber-500/20 to-orange-600/10", 
+        border: "border-amber-500/30", 
+        text: "text-amber-300",
+        glow: "shadow-amber-500/20"
+    },
+    default: { 
+        bg: "from-neutral-500/20 to-neutral-600/10", 
+        border: "border-neutral-500/30", 
+        text: "text-neutral-300",
+        glow: "shadow-neutral-500/10"
+    },
+};
 
-let color = "default";
 const lowerTech = tech.toLowerCase();
-
-if (supported.includes(lowerTech)) {
-    color = lowerTech;
-}
-
-const colorClass = `tech-${color}`;
+const colors = colorMap[lowerTech] || colorMap.default;
 ---
 
-<style>
-    @import "tailwindcss";
-
-    .tech-default {
-        @apply bg-linear-to-r from-neutral-600/40 to-neutral-800/40;
-    }
-
-    .tech-python {
-        @apply bg-linear-to-r from-green-700/40 to-green-900/40;
-    }
-
-    .tech-swift {
-        @apply bg-linear-to-r from-orange-700/40 to-red-900/40;
-    }
-
-    .tech-typescript {
-        @apply bg-linear-to-r from-blue-800/40 to-indigo-900/40;
-    }
-
-    .tech-java {
-        @apply bg-linear-to-r from-amber-700/40 to-red-800/40;
-    }
-</style>
-
-<span class={`${colorClass} bg-stone-800 px-3 py-1 
-ring-1 ring-neutral-700
-rounded-full
-text-xs font-extrabold`}>
-    <span class={"text-neutral-100/80"}>
-        {tech}</span>
+<span class:list={[
+    "inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold",
+    "bg-gradient-to-r backdrop-blur-sm border transition-all duration-300",
+    "hover:scale-105 shadow-lg",
+    colors.bg,
+    colors.border,
+    colors.text,
+    colors.glow
+]}>
+    {tech}
 </span>

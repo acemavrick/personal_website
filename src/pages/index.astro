@@ -1,47 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-import ProjectsSection from '../components/ProjectsSection.astro';
+import ProjectGroup from '../components/ProjectGroup.astro';
+import { site } from '../config';
 ---
 
-<Base title="Shubh Randeria" description="Shubh Randeria's portfolio">
+<Base title={site.name} description={`${site.name}'s portfolio`}>
 	<Hero />
-	<!-- <div class="flex flex-col items-center justify-center">
-		<Image src="https://avatars.githubusercontent.com/acemavrick" alt="Shubh Randeria" width={100} height={100} class="rounded-full ring-2" />
-		<h1 class="text-4xl font-bold mt-4">Hello World</h1>
-	</div>
-	-->
-	<!-- <p class="fade-up delay-6 bio-paragraph">
-		This is the preview branch of my website on which I will be completely remaking the website.
-		The actual website is on the <a href="https://randeria.dev">main branch</a>.
-	</p> -->
 
-	<p class="fade-up delay-6 paragraph-section">
-		I'm planning this site
-		(or at least the home/project page) to be more narrative. 
+	<!-- timeline of project groups -->
+	<ProjectGroup class="fade-up delay-5" projectNames={["example", "example"]}>
+		I'm planning this site to be more narrative. 
 		This would include paragraphs and comments before each section of projects
-		instead of a big wall of projects.This layout is
-		demoed here, and is obviously a work in progress.
-	</p>
-	<ProjectsSection class="fade-up delay-5" projectNames={["example", "example"]} />
-	<p class="fade-up delay-6 paragraph-section">
+		instead of a big wall of projects. This layout is demoed here, and is obviously a work in progress.
+	</ProjectGroup>
+
+	<ProjectGroup class="fade-up delay-6" projectNames={["example", "example", "example"]}>
 		As you can see, there are a selection of projects displayed here.
 		(They're all examples right now). This section changes dynamically based
 		on the number of projects and screen sizes. This text area would be where
 		I would write about the projects directly below it, and can put some context
 		or summary of the projects.
-	</p>
-	<ProjectsSection class="fade-up delay-7" projectNames={["example", "example", "example"]} />
-	<p class="fade-up delay-6 paragraph-section">
-		These sections need not be more than one sentence.
-	</p>
-	<ProjectsSection class="fade-up delay-7" projectNames={["example", "example", "example", "example"]} />
+	</ProjectGroup>
 
-		<!-- <p>This is the preview branch of my website on which I will be completely remaking the website.
-			The actual website is on the <a class="text-green-500 hover:text-blue-200" href="https://randeria.dev">main branch</a>.
-		</p>
-		<p>Go to <a class="text-green-500 hover:text-blue-200" href="projects/example">projects/example</a> to see a preview of the page I'll use to show project details.</p> -->
-	<p class="fade-up delay-6 paragraph-section">
+	<ProjectGroup class="fade-up delay-7" projectNames={["example", "example", "example", "example"]}>
+		These sections need not be more than one sentence.
+	</ProjectGroup>
+
+	<p class="fade-up delay-7 paragraph-section pl-8 md:pl-12 mt-8">
 		Feel free to let me know what you think of the website! The socials that
 		are displayed at the top are actually real.
 	</p>
