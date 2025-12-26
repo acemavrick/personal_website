@@ -3,11 +3,10 @@ export const site = {
   name: "Shubh Randeria",
   pfp: "https://avatars.githubusercontent.com/acemavrick",
   url: "https://randeria.dev",
-  tagline: `Hello! My name is Shubh. 
-This is a preview branch of my website that is under active and frequent development.
-As such, it is not fully functional and may contain incorrect information.
-Feel free to give feedback (my socials are linked below) and you can also check out
-the actual website located at <a href="https://randeria.dev">randeria.dev</a>.`,
+  tagline: `I'm Shubh, a high school senior. 
+  I like building software to learn, and sometimes to solve problems I run into. 
+  This site shows some of what I've worked on. Feel free to look around and
+  don't hesitate to contact me if you have any feedback, questions, or just want to talk!`,
   socials: [
     { href: "https://github.com/acemavrick", handle: "acemavrick", icon: "github" },
     { href: "https://www.youtube.com/channel/UCv9H6UivmaxVSGd0ayGwV7w", handle: "@acemavrick5020", icon: "youtube" },

@@ -18,7 +18,13 @@ const { data } = project;
 const { Content } = await project.render();
 ---
 
-<Base title={data.title} bgVariant="article">
+<Base 
+    title={data.title} 
+    description={data.summary}
+    keywords={`${data.title}, ${data.tech.join(', ')}, Shubh Randeria`}
+    ogType="article"
+    bgVariant="article"
+>
     <article class="max-w-3xl mx-auto">
         <!-- home link with avatar -->
         <a href="/" class="home-link inline-flex items-center gap-3 text-neutral-400 hover:text-emerald-400 transition-all duration-300 mb-12 group">

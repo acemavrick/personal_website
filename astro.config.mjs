@@ -9,6 +9,9 @@ import mdx from '@astrojs/mdx';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://randeria.dev',
+  redirects: {
+    '/projects': '/'
+  },
   integrations: [sitemap(), mdx()],
   // image: {
   //   domains: []

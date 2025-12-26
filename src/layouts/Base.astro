@@ -8,19 +8,23 @@ interface Props {
 	keywords?: string;
 	author?: string;
 	image?: string;
+	ogType?: 'website' | 'article';
 	bgVariant?: 'home' | 'article';
 }
 
 const { 
 	title,
-	description = site.name,
+	description = site.tagline,
 	keywords = "Shubh Randeria, developer, software engineer, portfolio, Python, Swift, web development, GitHub",
 	author = site.name,
 	image = site.pfp,
+	ogType = 'website',
 	bgVariant = 'home'
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, site.url);
+const absoluteImageURL = image.startsWith('http') ? image : new URL(image, site.url).href;
+const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
 ---
 
 <!DOCTYPE html>
@@ -29,45 +33,45 @@ const canonicalURL = new URL(Astro.url.pathname, site.url);
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="color-scheme" content="dark" />
-		
-		<!-- disable meta tags bc this is on a separate branch -->
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#0a0a0f" />
 
 		<!-- seo meta tags -->
-		<!-- <meta name="description" content={description} />
+		<meta name="description" content={description} />
 		<meta name="keywords" content={keywords} />
 		<meta name="author" content={author} />
-		<link rel="canonical" href={canonicalURL} /> -->
+		<link rel="canonical" href={canonicalURL} />
 		
 		<!-- open graph for social sharing -->
-		<!-- <meta property="og:type" content="website" />
+		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={canonicalURL} />
-		<meta property="og:title" content={title} />
+		<meta property="og:title" content={fullTitle} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={image} /> -->
+		<meta property="og:image" content={absoluteImageURL} />
+		<meta property="og:site_name" content={site.name} />
+		<meta property="og:locale" content="en_US" />
 		
 		<!-- twitter card -->
-		<!-- <meta name="twitter:card" content="summary" />
-		<meta name="twitter:title" content={title} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={fullTitle} />
 		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={image} /> -->
+		<meta name="twitter:image" content={absoluteImageURL} />
 
 		<!-- structured data for search engines -->
-		<!-- <script type="application/ld+json" set:html={JSON.stringify({
+		<script type="application/ld+json" set:html={JSON.stringify({
 			"@context": "https://schema.org",
 			"@type": "Person",
-			"name": "Shubh Randeria",
-			"url": siteUrl,
-			"image": image,
-			"sameAs": [
-				"https://github.com/acemavrick"
-			],
+			"name": site.name,
+			"url": site.url,
+			"image": absoluteImageURL,
+			"sameAs": site.socials.filter(s => s.icon !== 'mail').map(s => s.href),
 			"jobTitle": "Developer",
 			"description": description
-		})} /> -->
+		})} />
 
 		<link rel="icon" type="image/svg+xml" href={site.pfp} />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<title>{fullTitle}</title>
 	</head>
 	<body class="min-h-screen text-neutral-100 bg-neutral-950 relative overflow-x-hidden">
 		<!-- layered gradient background - green, blue, pink triad -->
