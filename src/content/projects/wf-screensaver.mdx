@@ -1,0 +1,57 @@
+---
+title: "Wavefunction Screensaver"
+date: "Summer 2025"
+tech: ["Swift", "Metal"]
+summary: "A MacOS screensaver that simulates wave propogation."
+---
+import { Image } from "astro:assets";
+import screensaverImg from "@assets/IMG_4120.jpeg";
+
+<figure class="not-prose my-8">
+  <Image 
+    src={screensaverImg} 
+    alt="Wavefunction Screensaver in action on Mac"
+    class="rounded-xl shadow-lg shadow-black/30 w-full"
+  />
+  <figcaption class="text-neutral-400 text-center mt-3 text-sm italic">
+    The screensaver.
+  </figcaption>
+</figure>
+
+## Quick Links
+
+- [Repository](https://github.com/acemavrick/wavefunction-screensaver)
+- [Devlog](https://summer.hackclub.com/projects/4379) (Summer of Making 2025)
+- [Download](https://github.com/acemavrick/wavefunction-screensaver/releases) (macOS only)
+
+## About
+
+I had previously made a simulation of the 
+[2-dimensional wave equation](https://en.wikipedia.org/wiki/Wave_equation#Scalar_wave_equation_in_three_space_dimensions)
+in my Simulations project. I thought that this looked cool, so I decided to pull
+it into a dedicated screensaver project.
+
+This was actually a pretty hard task to complete because Apple's documentation
+for third party screensavers is extremely lacking, outdated, and doesn't even
+use modern Swift features. It took a lot of time reading through online 
+tutorials and forums and a lot of trial and error to finally get it working
+decently (the screensaver part, not the simulation part). It's still buggy,
+but fixing the bugs is not in my control - that's all on Apple.
+
+As to the simulation part, I just had to do some heavy optimization to get it
+to be as efficient and performant as possible. I used Metal Performance Shaders
+to accelerate certain parts, and did some aggressive resource management. It still
+uses a lot of the GPU and battery life, but it was as good as I could make it
+without sacrificing accuracy and the fact that it is a simulation.
+
+I think that something like this could be fun thing to display on Apple TVs,
+so have started working on a TVOS app for it, but it's still a work in progress.
+I may revisit this project someday to push that through.
+
+## How It Works
+
+The screensaver implements a numerical solution to the 2D wave equation
+using Metal compute shaders and (conceptually) the eulerian method (Runge-Kutta, 
+to be precise). Random disturbances are periodically added to keep the simulation
+interesting. Sometimes it breaks down into chaos, but most of the time it just
+looks pretty and cool.
