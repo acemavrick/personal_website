@@ -6,6 +6,7 @@ const projects = defineCollection({
 		date: z.string(),
 		tech: z.array(z.string()),
 		summary: z.string(),
+		inProgress: z.boolean().optional().default(false),
 	}),
 });
 
