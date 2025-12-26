@@ -1,34 +1,34 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-import ProjectGroup from '../components/ProjectGroup.astro';
+// import ProjectGroup from '../components/ProjectGroup.astro';
 import { site } from '../config';
+import { getCollection } from 'astro:content';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const projects = await getCollection("projects");
 ---
 
-<Base title={site.name} description={`${site.name}'s portfolio`}>
+<Base title={site.name}>
 	<Hero />
 
-	<!-- timeline of project groups -->
-	<ProjectGroup class="fade-up delay-5" projectNames={["uildl", "example"]}>
-		I'm planning this site to be more narrative. 
-		This would include paragraphs and comments before each section of projects
-		instead of a big wall of projects. This layout is demoed here, and is obviously a work in progress.
-	</ProjectGroup>
+	<!-- for now, just display a wall of project cards -->
 
-	<ProjectGroup class="fade-up delay-6" projectNames={["example", "example", "example"]}>
-		As you can see, there are a selection of projects displayed here.
-		(They're all examples right now). This section changes dynamically based
-		on the number of projects and screen sizes. This text area would be where
-		I would write about the projects directly below it, and can put some context
-		or summary of the projects.
-	</ProjectGroup>
+    <header class="mb-12">
+        <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-br from-white to-neutral-300 bg-clip-text text-transparent">
+            Projects
+        </h1>
+        <p class="text-neutral-400 mt-3">Some of the things that I've built so far.
+			I am in the process of writing more about each project and updating this collection.
+			To see all of my projects, you can always visit my GitHub profile (linked above)
+			which will always be up to date.
+		</p>
+    </header>
 
-	<ProjectGroup class="fade-up delay-7" projectNames={["example", "example", "example", "example"]}>
-		These sections need not be more than one sentence.
-	</ProjectGroup>
-
-	<p class="fade-up delay-7 paragraph-section pl-8 md:pl-12 mt-8">
-		Feel free to let me know what you think of the website! The socials that
-		are displayed at the top are actually real.
-	</p>
+    <!-- project gallery grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {projects.map((project) => (
+            <ProjectCard name={project.id.replace(/\.mdx?$/, "")} />
+        ))}
+    </div>
 </Base>
