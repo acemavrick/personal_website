@@ -1,0 +1,51 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import TechTag from "../../components/TechTag.astro";
+import { site } from "../../config";
+
+export async function getStaticPaths() {
+    const projects = await getCollection("projects");
+
+    return projects.map((proj) => ({
+        params: { slug: proj.slug || proj.id.replace(/\.mdx?$/, "") },
+        props: { project: proj },
+    }));
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await project.render();
+---
+
+<Base title={data.title} bgVariant="article">
+    <article class="max-w-3xl mx-auto">
+        <!-- home link with avatar -->
+        <a href="/" class="home-link inline-flex items-center gap-3 text-neutral-400 hover:text-emerald-400 transition-all duration-300 mb-12 group">
+            <div class="relative">
+                <div class="absolute inset-0 rounded-full bg-emerald-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <img src={site.pfp} alt={site.name} class="relative w-9 h-9 rounded-full border border-white/20 group-hover:border-emerald-500/50 transition-all duration-300" />
+            </div>
+            <span class="text-sm font-medium">Home</span>
+        </a>
+
+        <header class="mb-14 flex flex-col gap-5">
+            <h1 class="text-3xl md:text-5xl font-bold bg-gradient-to-br from-white to-neutral-300 bg-clip-text text-transparent">{data.title}</h1>
+            {data.inProgress && (
+                <span class="flex items-center gap-1.5 text-xs text-amber-400/80 w-fit px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+                    <span class="size-1.5 rounded-full bg-amber-400/60"></span>
+                    In Progress
+                </span>
+            )}
+            <div class="flex flex-wrap gap-2">
+                {data.tech.map((tech) => <TechTag {tech} />)}
+            </div>
+            <p class="text-lg text-neutral-200 leading-relaxed">{data.summary}</p>
+            <div class="w-20 h-px bg-gradient-to-r from-emerald-500/60 via-blue-500/30 to-pink-500/20 mt-2"></div>
+        </header>
+
+        <section class="prose prose-lg prose-invert max-w-none">
+            <Content />
+        </section>
+    </article>
+</Base>

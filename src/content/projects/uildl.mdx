@@ -1,0 +1,174 @@
+---
+title: "UIL-DL"
+date: "Fall 2025"
+tech: ["Python", "SvelteKit"]
+summary: "A resource management tool that makes it easier to download, organize,
+and manage UIL Academics study materials, making studying more efficient and pain-free."
+website: "https://uildl.randeria.dev"
+repo: "https://github.com/acemavrick/uildl"
+inProgress: true
+---
+
+## Quick Info
+A more detailed overview of the project is below, but here are some essential things:
+
+- [Product Website](https://uildl.randeria.dev)
+- [Repository](https://github.com/acemavrick/uil-dl)
+- [Documentation](https://github.com/acemavrick/uil-dl/blob/standalone/README.md)
+- [Devlog](https://summer.hackclub.com/projects/8608) (Summer of Making 2025)
+- To give feedback, contact me on one of my socials (on the homepage)
+
+## Current Status <span class="text-base text-gray-400 font-normal align-middle ml-2">(as of December 26, 2025)</span>
+
+I'm working on a new version of the desktop application,
+which will be more polished, performant, and maintainable. I plan to 
+build the application using SvelteKit and Tauri (a Rust-based framework).
+I intend to learn Rust through the process, so a full rewrite is inevitable.
+However, I might publish a version in the interim that uses a Python server
+to manage all the backend logic while I am rewriting it in Rust.
+If you have any suggestions, please let me know!
+
+## Background
+
+In 1910, the University of Texas at Austin started a program called the
+"University Interscholastic League", or UIL for short. In their own words,
+this league exists to "provide educational extracurricular academic,
+athletic, and music contests" ([source](https://www.uiltexas.org/about)).
+
+UIL Academics is the branch of UIL that is responsible for the academic competitions.
+These competitions cover a wide range of subjects, including english, math, science,
+social studies, spelling, etc. You can find the whole list [here](https://www.uiltexas.org/academics/academic-contests).
+For the past few years, the past tests were locked behind a paywall, making it difficult
+for all students to study for the competitions. But recently, the tests have been
+made available for free to all students online. 
+
+However, the way the tests are organized and presented can be quite difficult to navigate. For example,
+the materials for 2025 are located [here](https://www.uiltexas.org/academics/page/2025-high-school-academic-study-materials),
+and the materials for 2021 can be found [here](https://www.uiltexas.org/academics/page/2021-high-school-academic-study-materials).
+While it is easy to go to earlier years' tests, the lack of future links on the side
+means that it is necessary to edit the URL manually to go to the next year's materials.
+Furthermore, the files have inconsistend names, making it difficult to organize, and 
+downloading them has to be done individually.
+
+My solution to these inconveniences was to make a tool that would allow me to 
+provide a different interface for the materials and allow me to download them
+all at once.
+
+I present to you: [UIL-DL](https://uildl.randeria.dev).
+
+## Development
+
+UIL-DL started off as a project to help me study for the contests. I got tired of
+downloading the materials individually, and tended to lose them anyway, especially
+because of how inconsistent the file names were. In my mind, this had perfect potential
+to be a web-scraping project. Using Python and BeautifulSoup, I was able to build a 
+small script that would go through every year's materials and get the download links
+to the files. 
+
+### Organizing the Data
+I would say that one of the harder parts of the project was organizing and displaying
+the files in a way that was easy to understand and use. 
+
+Most of them were just a single PDF per contest (Invitational A, District, Region, etc.),
+but some of them included multiple levels at once (the 'Study Packets') while the 
+programming contests had an additional link to contest data, which usually
+went to Box links (or other cloud storage). I had to handle those separately (I
+basically had the user just download them manually). 
+
+Then there were naming inconsistencies. For example, for science, 2019's state 
+packet was named `Science_StudyPacket_S_19.pdf`, while 2022's was named 
+`Science_S_22.pdf`, and 2023's was named `Science_Study_Packet_s_23.pdf`. This was
+somewhat trivial to handle – I just had to tweak my scraping to build a format based
+on the headings that the links were under (which were more consistent). I also had
+to do some manual formatting (I defined substitutions to be used) in order to ensure
+consistent file output. You can see the full list of links [here](https://raw.githubusercontent.com/acemavrick/uil-dl/refs/heads/v-2/data/info.json)
+(the substitutions are at the end of the file).
+
+### Building the App
+Once I was able to get the links and build a standardized database of 
+contest information paired with links, downloading and organizing the files was a breeze.
+For the longest time, I was just using temporary Python scripts to download the files,
+but I realized that this would be useful for other people to use – and the majority
+of people that could benefit from this wouldn't have the technical knowledge to use
+the Python scripts. So I moved on to making an actual application. 
+
+I decided to make a website that I would then embed using `pywebview` and then build executable files
+from that. I used HTMX paired with Tailwind CSS and some heavy use of JavaScript to
+make a dynamic and responsive table-based interface. The user could click on rows
+to select files they wanted to download, and then click a button to download all 
+selected files (in bulk). 
+
+From a utility point of view, the application worked well (though it was somewhat buggy).
+I polished things up the best I could at the time (I was learning to ship as I went,
+and not wait on prefection), and started the process of building executable files.
+
+Building the executables was *way more* than a bit of a pain.
+
+Everything was set up and working in the Python environment. I just had to build the
+executable. Just a simple step using `pyinstaller`, and then I was done. But nope.
+I ran into multiple issues when using `pyinstaller` to build the executable for
+Windows and Linux machines (I was and am still a macOS user). Firstly, having access to only
+a MacBook meant that I had to rely on a VM (QEMU) and/or my friend's machine to
+build and test the executable. Then, something would go wrong nearly all the time:
+it wouldn't start up, the executable would get corrupted, something 
+about .NET stuff and the like. I spent a lot of time trying to work it out and 
+ultimately gave up and switched to using Nuitka to build the executable. Nuitka
+is different from `pyinstaller` in that it compiles the Python code into C/C++ code.
+I was hoping that that would be better since it doesn't need to package the Python interpreter
+and libraries with the executable. But that had its own set of issues. After a bunch
+of trial and error, and reading docs, and struggling, I finally was able to build it
+on all Windows (I gave up on Linux – they can build it from source). And it worked...
+at least on some systems. There were some issues with it running on certain systems,
+(something about .NET), and the build process took a long time. I just released
+those executables anyway [on github](https://github.com/acemavrick/uil-dl/releases/tag/v1.0.0-beta)
+and started working on a new version of the application. Since that first release,
+which has quite a few bugs, I haven't released any new desktop executables.
+
+### UIL-DL Online
+
+This time around, I decided to scrap all the pywebview stuff and make a smaller
+tkinter-based application that would prompt the user to open the interface
+in their own browser. I was hoping that this would be easier to build and distribute,
+at the cost of a slightly less polished interface.
+
+I continued in that way for some time, as I built the interface using SvelteKit
+and Tailwind CSS. I got a lot of the display logic working, including selection
+and filtering and searching and sorting and all that good stuff. It was definitely
+a big improvement over the previous version, being smoother and much more responsive.
+
+When I got to the part where I had to build the system to actually download the files,
+I kind of pivoted to just making a website. I had been told from multiple independent
+sources that it would be great to have something that would be accessible from any device,
+without an install. I basically already had that by now, so I just made a couple of tweaks
+and then published it as the "online" version of UIL-DL, which you can try out [here](https://uildl.randeria.dev/online).
+While this doesn't have the "resource management" aspect of the previous version,
+it is much more accessible and easier to use.
+
+But that doesn't mean that I'm done.
+
+### Future Plans
+
+I still plan on making a 2.0 version of UIL-DL, which would be a desktop application
+that would mimic the interface of the online version, but with the ability to download
+files directly to the computer, and to manage the files on the computer. This was put
+on pause due to my schedule and other priorities (college applications), but I may
+get around to it eventually, if only just to fix bugs and have a pretty usable app.
+
+I'm also considering hosting the files on my own server, so that I can have more control
+over the permanency and accessibility of the files. This would also allow me to
+add more features, such as splitting the answer keys from the practice tests. But this
+is a bit more tentative than the other plans that I have in mind, and may not happen.
+Splitting the answer keys would be a lot of work, and I'm not sure if it's worth the effort.
+I'll give $10 to anyone willing to do so (joke).
+
+## Conclusion
+
+UIL-DL was a fun and interesting project to work on. I learned a lot about
+web scraping, web development, desktop application development, and more.
+I'm proud of the work that I did on it, and I'm glad that I was able to help
+others study for the contests. Based on the limited analytics on the app 
+(over 500 packets were downloaded through this!) and feedback I've received,
+it seems that it has been helpful to some people, which is a great feeling.
+
+I'm writing this in December 2025, and expect for there to be an uptick in usage
+soon, as the competition season is starting... but we'll see how it goes.

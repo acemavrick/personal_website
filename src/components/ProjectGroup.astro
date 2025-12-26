@@ -1,0 +1,40 @@
+---
+// groups narrative text with project cards as one timeline unit
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+    projectNames: string[];
+    class?: string;
+}
+
+const { projectNames, class: className } = Astro.props;
+---
+
+<section class:list={["project-group relative pl-0 md:pl-14 py-8", className]}>
+    <!-- timeline line with gradient (hidden on mobile) -->
+    <div class="timeline-line absolute left-0 top-0 bottom-0 w-px hidden md:block">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/30 to-transparent"></div>
+    </div>
+    
+    <!-- timeline node -->
+    <div class="timeline-node-wrapper absolute left-0 top-10 -translate-x-1/2 hidden md:block">
+        <div class="timeline-node w-2.5 h-2.5 rounded-full bg-emerald-500 border border-emerald-400/50"></div>
+    </div>
+    
+    <!-- narrative slot (the comment/context for this section) -->
+    <div class="narrative text-neutral-200 leading-relaxed max-w-prose mb-6 text-[15px]">
+        <slot />
+    </div>
+    
+    <!-- project cards grid - centered on mobile -->
+    <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] justify-items-center sm:justify-items-stretch">
+        {projectNames.map((name: string) => <ProjectCard name={name} />)}
+    </div>
+</section>
+
+<style>
+    .project-group:hover .timeline-node {
+        background-color: rgb(52 211 153);
+        transition: all 0.3s ease;
+    }
+</style>
