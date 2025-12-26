@@ -1,70 +1,34 @@
 ---
 import Base from '../layouts/Base.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import SocialTag from '../components/SocialTag.astro';
-import type { Project } from '../types/project';
-
-const projectModules = import.meta.glob<{project: Project}>('../projects/*.astro', { eager: true });
-const projects = Object.values(projectModules).map((module) => module.project);
-
-// Explicit "coming soon" card to always render at the bottom
-const comingSoonProject: Project = {
-    title: "New releases on the horizon",
-    description:
-        "Fresh, thoughtfully crafted projects are underway and will debut here as soon as they're polished and production‑ready.",
-    url: ""
-};
-
+import Hero from '../components/Hero.astro';
+import ProjectGroup from '../components/ProjectGroup.astro';
+import { site } from '../config';
 ---
 
-<Base 
-	title="Shubh Randeria"
-	description="Shubh Randeria's portfolio showcasing projects including UIL-DL, Wavefunction Screensaver, and more."
-	keywords="Metal Shading Language, acemavrick, portfolio, developer, Python, Swift, macOS development, UIL-DL, Wavefunction Screensaver"
->
-	<!-- header section -->
-	<header class="mb-16 text-center space-y-6">
-		<div class="inline-block relative group">
-			<div class="absolute -inset-1 bg-gradient-to-r from-sky-400 via-teal-400 to-rose-400 rounded-full opacity-30 group-hover:opacity-50 blur transition duration-500"></div>
-			<img 
-				src="https://avatars.githubusercontent.com/acemavrick" 
-				alt="Shubh Randeria profile picture" 
-				class="relative w-28 h-28 rounded-full border-2 border-neutral-200 dark:border-neutral-800 transition-transform duration-300 hover:scale-105"
-				loading="lazy"
-			/>
-		</div>
-		
-		<div class="space-y-3">
-			<h1 class="text-4xl md:text-5xl font-bold tracking-tight">
-				<span class="text-gradient-sky">Shubh Randeria</span>
-			</h1>
-			<!-- <p class="text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
-				Developer passionate about building elegant solutions and exploring creative intersections of technology and design.
-			</p> -->
-		</div>
-		
-		<div class="flex justify-center flex-wrap gap-3 pt-2">
-			<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/github.svg" logo_name="Github Logo" link="https://github.com/acemavrick" name="GitHub" />
-			<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/instagram.svg" logo_name="Instagram Logo" link="https://instagram.com/shubh.randeria" name="Instagram" />
-			<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/youtube.svg" logo_name="YouTube Logo" link="https://youtube.com/@acemavrick5020" name="YouTube" />
-			<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/gmail.svg" logo_name="Email Logo" link="mailto:shubh@randeria.dev" name="Email" />
-			<SocialTag logo_link="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/googlephotos.svg" logo_name="Google Photos Logo" link="https://photos.app.goo.gl/GhLWSijcDZX3JsqF7" name="Photo Album" />
-		</div>
-	</header>
+<Base title={site.name} description={`${site.name}'s portfolio`}>
+	<Hero />
 
-	<!-- projects section -->
-	<section class="space-y-6">
-		<div class="flex items-center gap-3 mb-8">
-			<div class="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent"></div>
-			<h2 class="text-sm font-semibold tracking-wider uppercase text-neutral-500 dark:text-neutral-400">Featured Work</h2>
-			<div class="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent"></div>
-		</div>
-		
-        <div class="space-y-8">
-            {projects.map((project, index) => (
-                <ProjectCard project={project} index={index} />
-            ))}
-            <ProjectCard project={comingSoonProject} index={projects.length} />
-        </div>
-	</section>
+	<!-- timeline of project groups -->
+	<ProjectGroup class="fade-up delay-5" projectNames={["uildl", "example"]}>
+		I'm planning this site to be more narrative. 
+		This would include paragraphs and comments before each section of projects
+		instead of a big wall of projects. This layout is demoed here, and is obviously a work in progress.
+	</ProjectGroup>
+
+	<ProjectGroup class="fade-up delay-6" projectNames={["example", "example", "example"]}>
+		As you can see, there are a selection of projects displayed here.
+		(They're all examples right now). This section changes dynamically based
+		on the number of projects and screen sizes. This text area would be where
+		I would write about the projects directly below it, and can put some context
+		or summary of the projects.
+	</ProjectGroup>
+
+	<ProjectGroup class="fade-up delay-7" projectNames={["example", "example", "example", "example"]}>
+		These sections need not be more than one sentence.
+	</ProjectGroup>
+
+	<p class="fade-up delay-7 paragraph-section pl-8 md:pl-12 mt-8">
+		Feel free to let me know what you think of the website! The socials that
+		are displayed at the top are actually real.
+	</p>
 </Base>

@@ -1,67 +1,70 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* smooth animations */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes gradient-x {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @layer base {
   html {
     @apply scroll-smooth antialiased;
   }
-  
+
+  /* smoother text rendering */
   body {
-    @apply relative overflow-x-hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-  
-  body::before {
-    content: '';
-    @apply fixed top-0 left-0 w-full h-full -z-10 opacity-40;
-    background: 
-      radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(20, 184, 166, 0.12) 0%, transparent 50%),
-      radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.08) 0%, transparent 50%);
-    background-size: 200% 200%;
+
+  /* selection color */
+  ::selection {
+    @apply bg-emerald-500/30 text-white;
   }
 }
 
-/* custom gradient text utilities */
-@layer utilities {
-  .text-gradient-sky {
-    @apply bg-gradient-to-r from-sky-500 to-teal-400 bg-clip-text text-transparent;
+@layer components {
+  .paragraph-section {
+    @apply text-neutral-200 leading-relaxed max-w-prose;
   }
-  
-  .text-gradient-rose {
-    @apply bg-gradient-to-r from-rose-500 to-pink-400 bg-clip-text text-transparent;
+
+  /* link colors - emerald accent */
+  a {
+    @apply text-emerald-400 hover:text-emerald-300 transition-all duration-300;
   }
-  
-  .border-gradient {
-    border-image: linear-gradient(135deg, rgb(14, 165, 233), rgb(20, 184, 166)) 1;
+
+  /* prose customization for project detail pages */
+  .prose {
+    @apply prose-a:text-emerald-400 prose-a:hover:text-emerald-300 prose-a:no-underline prose-a:hover:underline;
+    @apply prose-headings:text-neutral-100 prose-p:text-neutral-200;
+    @apply prose-strong:text-white;
+    @apply prose-code:text-emerald-300 prose-code:bg-white/5 prose-code:px-2 prose-code:py-1 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-white/10;
+    @apply prose-pre:bg-neutral-900/80 prose-pre:border prose-pre:border-white/10 prose-pre:backdrop-blur-sm;
+    @apply prose-blockquote:border-emerald-500/50 prose-blockquote:text-neutral-300 prose-blockquote:bg-white/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1;
+    @apply prose-img:rounded-xl prose-img:shadow-2xl prose-img:border prose-img:border-white/10;
+    @apply prose-hr:border-white/10;
+  }
+
+  /* fade-up entrance animation */
+  .fade-up {
+    opacity: 0;
+    animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .delay-1 { animation-delay: 80ms; }
+  .delay-2 { animation-delay: 160ms; }
+  .delay-3 { animation-delay: 240ms; }
+  .delay-4 { animation-delay: 320ms; }
+  .delay-5 { animation-delay: 400ms; }
+  .delay-6 { animation-delay: 480ms; }
+  .delay-7 { animation-delay: 560ms; }
+}
+
+@keyframes fade-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+    filter: blur(4px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+    filter: blur(0);
   }
 }
