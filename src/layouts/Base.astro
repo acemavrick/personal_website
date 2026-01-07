@@ -1,6 +1,6 @@
 ---
-import '../styles/global.css';
-import { site } from '../config';
+import "../styles/global.css";
+import { site } from "../config";
 
 interface Props {
 	title: string;
@@ -8,28 +8,48 @@ interface Props {
 	keywords?: string;
 	author?: string;
 	image?: string;
-	ogType?: 'website' | 'article';
-	bgVariant?: 'home' | 'article';
+	ogType?: "website" | "article";
+	bgVariant?: "home" | "article";
 }
 
-const { 
+const {
 	title,
 	description = site.tagline,
 	keywords = "Shubh Randeria, developer, software engineer, portfolio, Python, Swift, web development, GitHub",
 	author = site.name,
 	image = site.pfp,
-	ogType = 'website',
-	bgVariant = 'home'
+	ogType = "website",
+	bgVariant = "home",
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, site.url);
-const absoluteImageURL = image.startsWith('http') ? image : new URL(image, site.url).href;
+const absoluteImageURL = image.startsWith("http")
+	? image
+	: new URL(image, site.url).href;
 const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="scroll-smooth">
 	<head>
+		<!-- Google Tag Manager -->
+		<script lang="js">
+			(function (w, d, s, l, i) {
+				w[l] = w[l] || [];
+				w[l].push({
+					"gtm.start": new Date().getTime(),
+					event: "gtm.js",
+				});
+				var f = d.getElementsByTagName(s)[0],
+					j = d.createElement(s),
+					dl = l != "dataLayer" ? "&l=" + l : "";
+				j.async = true;
+				j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+				f.parentNode.insertBefore(j, f);
+			})(window, document, "script", "dataLayer", "GTM-W2NTC7TS");
+		</script>
+		<!-- End Google Tag Manager -->
+
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="color-scheme" content="dark" />
@@ -41,7 +61,7 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
 		<meta name="keywords" content={keywords} />
 		<meta name="author" content={author} />
 		<link rel="canonical" href={canonicalURL} />
-		
+
 		<!-- open graph for social sharing -->
 		<meta property="og:type" content={ogType} />
 		<meta property="og:url" content={canonicalURL} />
@@ -50,7 +70,7 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
 		<meta property="og:image" content={absoluteImageURL} />
 		<meta property="og:site_name" content={site.name} />
 		<meta property="og:locale" content="en_US" />
-		
+
 		<!-- twitter card -->
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={fullTitle} />
@@ -58,46 +78,70 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
 		<meta name="twitter:image" content={absoluteImageURL} />
 
 		<!-- structured data for search engines -->
-		<script type="application/ld+json" set:html={JSON.stringify({
-			"@context": "https://schema.org",
-			"@type": "Person",
-			"name": site.name,
-			"url": site.url,
-			"image": absoluteImageURL,
-			"sameAs": site.socials.filter(s => s.icon !== 'mail').map(s => s.href),
-			"jobTitle": "Developer",
-			"description": description
-		})} />
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify({
+				"@context": "https://schema.org",
+				"@type": "Person",
+				name: site.name,
+				url: site.url,
+				image: absoluteImageURL,
+				sameAs: site.socials
+					.filter((s) => s.icon !== "mail")
+					.map((s) => s.href),
+				jobTitle: "Developer",
+				description: description,
+			})}
+		/>
 
 		<link rel="icon" type="image/svg+xml" href={site.pfp} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{fullTitle}</title>
 	</head>
-	<body class="min-h-screen text-neutral-100 bg-neutral-950 relative overflow-x-hidden">
+	<body
+		class="min-h-screen text-neutral-100 bg-neutral-950 relative overflow-x-hidden"
+	>
+		<!-- Google Tag Manager (noscript) -->
+		<noscript
+			><iframe
+				src="https://www.googletagmanager.com/ns.html?id=GTM-W2NTC7TS"
+				height="0"
+				width="0"
+				style="display:none;visibility:hidden"></iframe></noscript
+		>
+		<!-- End Google Tag Manager (noscript) -->
 		<!-- layered gradient background - green, blue, pink triad -->
 		<div class="fixed inset-0 -z-10">
 			<!-- base dark -->
 			<div class="absolute inset-0 bg-[#0a0a0f]"></div>
-			
-			{bgVariant === 'home' ? (
-				<>
-					<div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(16,185,129,0.18),transparent)]"></div>
-					<div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_95%_20%,rgba(59,130,246,0.12),transparent)]"></div>
-					<div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_0%_25%,rgba(244,114,182,0.12),transparent)]"></div>
-				</>
-			) : (
-				<>
-					<div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_0%_0%,rgba(16,185,129,0.12),transparent)]"></div>
-					<div class="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_100%_5%,rgba(59,130,246,0.08),transparent)]"></div>
-					<div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_25%_at_50%_100%,rgba(244,114,182,0.05),transparent)]"></div>
-				</>
-			)}
-			
+
+			{
+				bgVariant === "home" ? (
+					<>
+						<div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(16,185,129,0.18),transparent)]" />
+						<div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_95%_20%,rgba(59,130,246,0.12),transparent)]" />
+						<div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_0%_25%,rgba(244,114,182,0.12),transparent)]" />
+					</>
+				) : (
+					<>
+						<div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_0%_0%,rgba(16,185,129,0.12),transparent)]" />
+						<div class="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_100%_5%,rgba(59,130,246,0.08),transparent)]" />
+						<div class="absolute inset-0 bg-[radial-gradient(ellipse_50%_25%_at_50%_100%,rgba(244,114,182,0.05),transparent)]" />
+					</>
+				)
+			}
+
 			<!-- subtle vignette for depth -->
-			<div class="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_30%,rgba(0,0,0,0.3)_100%)]"></div>
-			
+			<div
+				class="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_30%,rgba(0,0,0,0.3)_100%)]"
+			>
+			</div>
+
 			<!-- noise texture -->
-			<div class="absolute inset-0 opacity-[0.12] bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')]"></div>
+			<div
+				class="absolute inset-0 opacity-[0.12] bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')]"
+			>
+			</div>
 		</div>
 		<main class="relative mx-auto max-w-5xl px-6 py-12 md:py-20">
 			<slot />
