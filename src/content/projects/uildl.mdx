@@ -16,9 +16,10 @@ A more detailed overview of the project is below, but here are some essential th
 - [Repository](https://github.com/acemavrick/uil-dl)
 - [Documentation](https://github.com/acemavrick/uil-dl/blob/standalone/README.md)
 - [Devlog](https://summer.hackclub.com/projects/8608) (Summer of Making 2025)
+- [More Recent Devlog](https://flavortown.hackclub.com/projects/11950) (Flavortown 2026)
 - To give feedback, contact me on one of my socials (on the homepage)
 
-## Current Status <span class="text-base text-gray-400 font-normal align-middle ml-2">(as of December 26, 2025)</span>
+{/* ## Current Status <span class="text-base text-gray-400 font-normal align-middle ml-2">(as of December 26, 2025)</span>
 
 I'm working on a new version of the desktop application,
 which will be more polished, performant, and maintainable. I plan to 
@@ -26,7 +27,23 @@ build the application using SvelteKit and Tauri (a Rust-based framework).
 I intend to learn Rust through the process, so a full rewrite is inevitable.
 However, I might publish a version in the interim that uses a Python server
 to manage all the backend logic while I am rewriting it in Rust.
-If you have any suggestions, please let me know!
+If you have any suggestions, please let me know! */}
+
+## Current Status (Devlog) <span class="text-base text-gray-400 font-normal align-middle ml-2">(as of February 5, 2026)</span>
+
+Long devlog, did a lot of work. TL;DR: the app has been improved and features have been added. Almost there to a beta release.
+
+The earlier version of this app was bad in a lot of ways. It didn't work on some Windows machines, didn't support Linux, was slow, and was pretty buggy on top of all that. It failed at being cross platform, and was hard to maintain and build for other systems (I only have a Mac). So I decided to rebuild it from the ground up (mostly) to fix the issues and make improvements.
+
+Firstly, by building this in Rust and SvelteKit using the Tauri framework, I have made it much easier to develop so that it supports multiple platforms. It is also much faster at doing its job and more responsive, since the frontend is SvelteKit (a huge improvement over HTMX). This fixed a lot of the bugs (although I haven't yet tried to build for Windows) and was by itself a major improvement in the app. I don't have to track and maintain source code for different systems (especially metadata) – everything is the same, and Tauri manages most of the rest (including the icons!). 
+
+Secondly, I made more optimizations to the app design. Earlier, I was using a database to store all the contests. That was me being overeager – around 600 items does not warrant a whole sqlite database. So I just stored it in memory. This simplifies a LOT of the cache management stuff and reduces a bunch of complexity. I just scan files on disk and store it in an array-type structure, which is quicker and simpler. I also removed the .cache_manifest file as it was not providing any significant benefit – and makes my life as a developer easier (I don't have to worry about users messing with it, or of updating it, etc.). So the only files that are managed and hidden from the user are the config and info.json files. I also implemented a download queue with rate limiting, which is a big QoL improvement. This, along with the filters and updated searching (fuzzy, exact, and regex, w/optional case sensitivity) is a benefit of using SvelteKit as a frontend. 
+
+I think that the app looks and feels far better than it did before. It launches fast, downloads efficiently (with full transparency to the user, should they wish to see it), and is more simple and intuitive to use. Of course, I have to test it widely and implement a couple more features before releasing a primary version.
+
+What next? I am planning on adding a simpler usersettings/config file that I can also *edit remotely* (so in a way, remote updates). I then need to verify the update system to the new config layout and the info.json file. I then need to add analytics and telemetry – I am thinking about pivoting away from GA to something simpler, more private, and easier to set up. After that, I'll add a notification system so that I (as a developer) can send out notifications, like if there are problems, updates, or I just want to survey people. And then finally, if I see that it works, I can ship a beta version (which will also coincide with a ship on this platform). There are further improvements I want to make, but they are more QoL than necessity and I can procrastinate on those. 
+
+Latest commit: [here](https://github.com/acemavrick/uil-dl/commit/29e2190042496872ffb8a60fecfbfd436c2d3392).
 
 ## Background
 
