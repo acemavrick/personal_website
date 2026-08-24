@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-// import ProjectGroup from '../components/ProjectGroup.astro';
 import { site } from '../config';
 import { getCollection } from 'astro:content';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -27,7 +26,7 @@ const projects = (await getCollection("projects")).sort((a, b) => {
         </h1>
         <p class="text-neutral-400 mt-3">Some of the things that I've built so far.
 			I am in the process of writing more about each project and updating this collection.
-			To see all of my projects, you should visit my GitHub profile (linked above)
+			To see all of my projects, visit my GitHub profile (linked above),
 			which will always be up to date.
 		</p>
     </header>
@@ -35,7 +34,7 @@ const projects = (await getCollection("projects")).sort((a, b) => {
     <!-- project gallery grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {projects.map((project) => (
-            <ProjectCard name={project.id.replace(/\.mdx?$/, "")} />
+            <ProjectCard project={project} />
         ))}
     </div>
 </Base>

@@ -1,2 +1,2 @@
 # [randeria.dev](https://randeria.dev)
-My personal website, built with Astro and hosted on GitHub Pages
+My personal website, built with Astro.

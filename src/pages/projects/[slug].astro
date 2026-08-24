@@ -1,6 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import TechTag from "../../components/TechTag.astro";
 import { site } from "../../config";
 
@@ -8,14 +8,14 @@ export async function getStaticPaths() {
     const projects = await getCollection("projects");
 
     return projects.map((proj) => ({
-        params: { slug: proj.slug || proj.id.replace(/\.mdx?$/, "") },
+        params: { slug: proj.id.replace(/\.mdx?$/, "") },
         props: { project: proj },
     }));
 }
 
 const { project } = Astro.props;
 const { data } = project;
-const { Content } = await project.render();
+const { Content } = await render(project);
 ---
 
 <Base 
@@ -36,7 +36,7 @@ const { Content } = await project.render();
         </a>
 
         <header class="mb-14 flex flex-col gap-5">
-            <h1 class="text-3xl md:text-5xl font-bold bg-gradient-to-br from-white to-neutral-300 bg-clip-text text-transparent">{data.title}</h1>
+            <h1 class="text-3xl md:text-5xl font-bold bg-linear-to-br from-white to-neutral-300 bg-clip-text text-transparent">{data.title}</h1>
             {data.inProgress && (
                 <span class="flex items-center gap-1.5 text-xs text-amber-400/80 w-fit px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
                     <span class="size-1.5 rounded-full bg-amber-400/60"></span>
@@ -47,7 +47,7 @@ const { Content } = await project.render();
                 {data.tech.toSorted((a, b) => a.localeCompare(b)).map((tech) => <TechTag {tech} />)}
             </div>
             <p class="text-lg text-neutral-200 leading-relaxed">{data.summary}</p>
-            <div class="w-20 h-px bg-gradient-to-r from-emerald-500/60 via-blue-500/30 to-pink-500/20 mt-2"></div>
+            <div class="w-20 h-px bg-linear-to-r from-emerald-500/60 via-blue-500/30 to-pink-500/20 mt-2"></div>
         </header>
 
         <section class="prose prose-lg prose-invert max-w-none">
