@@ -9,8 +9,10 @@ import mdx from '@astrojs/mdx';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://randeria.dev',
+  // try to keep _redirects synced as well
   redirects: {
-    '/projects': '/'
+    '/projects': '/',
+    '/resume': '/resume.pdf'
   },
   integrations: [sitemap(), mdx()],
   vite: {
