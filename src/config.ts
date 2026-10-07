@@ -7,7 +7,14 @@ export const site = {
   // picked at random per load; the first is canonical and feeds meta/previews
   taglines: [
     `Stanford '30. I seek to advance cutting-edge work while building infrastructure that extends its reach.`,
+    `Stanford '30. I seek to advance cutting-edge work while building infrastructure that extends its reach.`,
+    `Stanford '30. I seek to advance cutting-edge work while building infrastructure that extends its reach.`,
+    `Stanford '30. I seek to advance cutting-edge work while building infrastructure that extends its reach.`,
     `Stanford '30. I like to learn new things and build to solve problems I encounter.`,
+    `Stanford '30. I like to learn new things and build to solve problems I encounter.`,
+    `Stanford '30. I like to learn new things and build to solve problems I encounter.`,
+    `Stanford '30. I like to learn new things and build to solve problems I encounter.`,
+    `Stanford '30. Have you checked out my new website? It's at: http://localhost:4321/`,
   ],
 
   // `icon` is any iconify name from simple-icons or lucide - see icon-sets.iconify.design

@@ -7,43 +7,62 @@ interface Heading {
 
 interface Props {
 	headings: Heading[];
+	title?: string;
+	href?: string;
 }
 
-const { headings } = Astro.props;
+const { headings, title, href } = Astro.props;
 const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const show = items.length >= 2;
+// the title acts as the entry for everything above the first heading
+const top = title && href ? { text: title, href, slug: "__top__" } : null;
 ---
 
 {show && (
 	<>
-		<!-- desktop schematic rail -->
-		<nav aria-label="Table of contents" class="toc-rail hidden xl:block" data-toc>
-			<div class="relative flex flex-col">
-				<div class="toc-track absolute top-1 bottom-1 w-px bg-white/10"></div>
-				<div class="toc-progress absolute top-1 bottom-1 w-px origin-top scale-y-0 bg-linear-to-b from-emerald-400 to-emerald-400/40"></div>
-				{items.map((h) => (
-					<a
-						href={`#${h.slug}`}
-						class="toc-link group relative flex items-center gap-3 py-2.5"
-						style={h.depth === 3 ? "padding-left: 0.85rem" : undefined}
-						data-slug={h.slug}
-					>
-						<span class="toc-node relative z-10 block size-[7px] shrink-0 rounded-full border border-white/25 bg-neutral-950 transition-all duration-300"></span>
-						<span class="toc-label max-w-32 truncate text-xs text-neutral-500 opacity-0 -translate-x-1 transition-all duration-300">
-							{h.text}
-						</span>
-					</a>
-				))}
+		<!-- desktop sidebar, parked left of the article column -->
+		<nav aria-label="Table of contents" class="toc-rail hidden xl:block">
+			<p class="mb-3 pl-3 text-[0.7rem] font-medium uppercase tracking-wider text-neutral-600">
+				On this page
+			</p>
+			<div class="toc-list relative">
+				<span class="toc-marker" aria-hidden="true"></span>
+				<ul class="flex flex-col">
+					{top && (
+						<li>
+							<a href={top.href} class="toc-link toc-title" data-slug={top.slug} data-top>
+								{top.text}
+							</a>
+						</li>
+					)}
+					{items.map((h) => (
+						<li>
+							<a href={`#${h.slug}`} class:list={["toc-link", h.depth === 3 && "nested"]} data-slug={h.slug}>
+								{h.text}
+							</a>
+						</li>
+					))}
+				</ul>
 			</div>
 		</nav>
 
 		<!-- mobile / tablet progress button -->
 		<div class="toc-mobile fixed bottom-5 right-5 z-30 xl:hidden">
-			<div class="toc-popover absolute bottom-full right-0 mb-3 w-56 origin-bottom-right scale-95 rounded-xl border border-white/10 bg-neutral-900/95 p-2 opacity-0 shadow-2xl backdrop-blur-md transition-all duration-200 pointer-events-none">
+			<div class="toc-popover absolute bottom-full right-0 mb-3 max-h-[60vh] w-60 origin-bottom-right scale-95 overflow-y-auto rounded-xl border border-white/10 bg-neutral-900/95 p-2 opacity-0 shadow-2xl backdrop-blur-md transition-all duration-200 pointer-events-none">
+				{top && (
+					<a
+						href={top.href}
+						class="toc-mobile-link block rounded-lg px-3 py-2 text-sm font-medium leading-snug text-neutral-300 transition-colors hover:bg-white/5 hover:text-emerald-300"
+						data-slug={top.slug}
+						data-top
+					>
+						{top.text}
+					</a>
+				)}
 				{items.map((h) => (
 					<a
 						href={`#${h.slug}`}
-						class="toc-mobile-link block truncate rounded-lg px-3 py-2 text-sm text-neutral-400 transition-colors hover:bg-white/5 hover:text-emerald-300"
+						class="toc-mobile-link block rounded-lg px-3 py-2 text-sm leading-snug text-neutral-400 transition-colors hover:bg-white/5 hover:text-emerald-300"
 						style={h.depth === 3 ? "padding-left: 1.5rem" : undefined}
 						data-slug={h.slug}
 					>
@@ -68,31 +87,56 @@ const show = items.length >= 2;
 )}
 
 <style>
+	/* gutter left of the 64rem main column, clamped on narrow screens */
 	.toc-rail {
 		position: fixed;
 		top: 50%;
 		transform: translateY(-50%);
-		left: max(1.25rem, calc((100vw - 64rem) / 2 + 1.25rem));
+		left: max(1rem, calc((100vw - 64rem) / 2 - 12.5rem));
+		width: 12rem;
+		max-height: 70vh;
+		overflow-y: auto;
 		z-index: 20;
 	}
 
-	.toc-link.is-active .toc-node {
-		border-color: rgb(52 211 153);
-		background-color: rgb(52 211 153);
-		box-shadow: 0 0 10px rgba(52, 211, 153, 0.65);
-		transform: scale(1.3);
+	.toc-link {
+		display: block;
+		border-left: 2px solid rgba(255, 255, 255, 0.1);
+		padding: 0.375rem 0.75rem;
+		font-size: 0.8125rem;
+		line-height: 1.35;
+		color: rgb(115 115 115);
+		transition: color 0.2s;
 	}
 
-	.toc-link.is-active .toc-label {
-		opacity: 1;
-		transform: translateX(0);
-		color: rgb(167 243 208);
+	.toc-link.toc-title {
+		font-weight: 500;
+		color: rgb(163 163 163);
 	}
 
-	.toc-link:hover .toc-label {
-		opacity: 1;
-		transform: translateX(0);
+	.toc-link.nested {
+		padding-left: 1.5rem;
+		font-size: 0.75rem;
+	}
+
+	.toc-link:hover {
 		color: rgb(212 212 212);
+	}
+
+	.toc-link.is-active {
+		color: rgb(52 211 153);
+	}
+
+	/* animates between entries; hidden until first positioned */
+	.toc-marker {
+		position: absolute;
+		left: 0;
+		width: 2px;
+		border-radius: 1px;
+		background: rgb(52 211 153);
+		opacity: 0;
+		transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+		will-change: transform, height;
 	}
 
 	.toc-mobile-link.is-active {
@@ -105,6 +149,12 @@ const show = items.length >= 2;
 		transform: scale(1);
 		pointer-events: auto;
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.toc-marker {
+			transition: none;
+		}
+	}
 </style>
 
 <script>
@@ -114,11 +164,17 @@ const show = items.length >= 2;
 		);
 		if (!allLinks.length) return;
 
+		const TOP = "__top__";
+
 		const setActive = (slug: string) => {
 			allLinks.forEach((l) => {
 				l.classList.toggle("is-active", l.dataset.slug === slug);
 			});
 		};
+
+		// rail entries in document order; the title points at the top of the page
+		const railLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc-link"));
+		const hasTop = railLinks.some((l) => l.dataset.top !== undefined);
 
 		const headingEls = allLinks
 			.map((l) => l.dataset.slug)
@@ -126,24 +182,7 @@ const show = items.length >= 2;
 			.map((slug) => document.getElementById(slug))
 			.filter((el): el is HTMLElement => !!el);
 
-		if (headingEls.length) {
-			setActive(headingEls[0].id);
-
-			const observer = new IntersectionObserver(
-				(entries) => {
-					const visible = entries.filter((e) => e.isIntersecting);
-					if (!visible.length) return;
-					const topmost = visible.reduce((a, b) =>
-						a.boundingClientRect.top < b.boundingClientRect.top ? a : b,
-					);
-					setActive(topmost.target.id);
-				},
-				{ rootMargin: "-10% 0px -70% 0px", threshold: [0, 1] },
-			);
-			headingEls.forEach((el) => observer.observe(el));
-		}
-
-		const progressEl = document.querySelector<HTMLElement>(".toc-progress");
+		const marker = document.querySelector<HTMLElement>(".toc-marker");
 		const ringEl = document.querySelector<SVGGeometryElement>(".toc-ring-progress");
 		const ringCirc = ringEl ? ringEl.getTotalLength() : 0;
 		if (ringEl) {
@@ -151,27 +190,72 @@ const show = items.length >= 2;
 			ringEl.style.strokeDashoffset = String(ringCirc);
 		}
 
-		const updateProgress = () => {
-			const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-			const progress = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
-			if (progressEl) progressEl.style.transform = `scaleY(${progress})`;
-			if (ringEl) ringEl.style.strokeDashoffset = String(ringCirc * (1 - progress));
+		const atBottom = () =>
+			document.documentElement.getBoundingClientRect().bottom <= window.innerHeight + 2;
+
+		const update = () => {
+			if (!headingEls.length) return;
+			const line = window.innerHeight * 0.25;
+
+			// viewport-space anchors: page top, then each heading
+			const anchors = hasTop
+				? [document.documentElement.getBoundingClientRect().top, ...headingEls.map((el) => el.getBoundingClientRect().top)]
+				: headingEls.map((el) => el.getBoundingClientRect().top);
+
+			// index of the entry being read
+			let i = 0;
+			while (i + 1 < anchors.length && anchors[i + 1] <= line) i++;
+			if (anchors[0] > line) i = 0;
+			if (atBottom()) i = anchors.length - 1;
+
+			const activeSlug = hasTop
+				? i === 0
+					? TOP
+					: headingEls[i - 1].id
+				: headingEls[i].id;
+			setActive(activeSlug);
+
+			// tracks the active entry so the bar and the highlight always agree
+			if (marker && railLinks.length) {
+				const current = railLinks[Math.min(i, railLinks.length - 1)];
+				marker.style.transform = `translateY(${current.offsetTop}px)`;
+				marker.style.height = `${current.offsetHeight}px`;
+				marker.style.opacity = "1";
+			}
+
+			if (ringEl) {
+				const de = document.documentElement;
+				const scrollable = de.scrollHeight - window.innerHeight;
+				const scrolled = -de.getBoundingClientRect().top;
+				const progress = scrollable > 0 ? Math.min(1, Math.max(0, scrolled / scrollable)) : 0;
+				ringEl.style.strokeDashoffset = String(ringCirc * (1 - progress));
+			}
 		};
 
 		let ticking = false;
-		window.addEventListener(
-			"scroll",
-			() => {
-				if (ticking) return;
-				ticking = true;
-				requestAnimationFrame(() => {
-					updateProgress();
-					ticking = false;
-				});
-			},
-			{ passive: true },
-		);
-		updateProgress();
+		const onScroll = () => {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				update();
+				ticking = false;
+			});
+		};
+		window.addEventListener("scroll", onScroll, { passive: true });
+		window.addEventListener("resize", onScroll, { passive: true });
+		update();
+
+		// a real link for middle-click and no-JS; in-page it scrolls up and drops the hash
+		allLinks
+			.filter((l) => l.dataset.top !== undefined)
+			.forEach((l) =>
+				l.addEventListener("click", (e) => {
+					if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+					e.preventDefault();
+					window.scrollTo({ top: 0, behavior: "smooth" });
+					history.replaceState(null, "", l.href);
+				}),
+			);
 
 		const btn = document.querySelector<HTMLButtonElement>(".toc-mobile-btn");
 		const popover = document.querySelector<HTMLElement>(".toc-popover");

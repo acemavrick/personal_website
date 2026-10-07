@@ -5,6 +5,13 @@ interface Props {
 
 const { tech } = Astro.props;
 
+// #FF3E00, shared by svelte and sveltekit
+const svelte = {
+    bg: "from-orange-600/15 to-red-500/5",
+    border: "border-orange-600/25",
+    text: "text-orange-400"
+};
+
 // color mapping for tech tags
 const colorMap: Record<string, { bg: string; border: string; text: string }> = {
     python: { 
@@ -12,10 +19,11 @@ const colorMap: Record<string, { bg: string; border: string; text: string }> = {
         border: "border-emerald-500/25", 
         text: "text-emerald-300"
     },
-    swift: { 
-        bg: "from-orange-500/15 to-red-500/5", 
-        border: "border-orange-500/25", 
-        text: "text-orange-300"
+    // swift: #F05138 red-orange
+    swift: {
+        bg: "from-red-500/15 to-rose-600/5",
+        border: "border-red-500/25",
+        text: "text-red-300"
     },
     typescript: { 
         bg: "from-blue-500/15 to-indigo-500/5", 
@@ -27,17 +35,19 @@ const colorMap: Record<string, { bg: string; border: string; text: string }> = {
         border: "border-amber-500/25", 
         text: "text-amber-300"
     },
-    // sveltekit: #FF3E00 Svelte orange-red
-    sveltekit: { 
-        bg: "from-orange-600/15 to-red-500/5", 
-        border: "border-orange-600/25", 
-        text: "text-orange-400"
+    svelte,
+    sveltekit: svelte,
+    // firebase: #FFCA28 yellow
+    firebase: {
+        bg: "from-yellow-400/15 to-amber-500/5",
+        border: "border-yellow-400/25",
+        text: "text-yellow-200"
     },
-    // jupyter: #F37626 warm orange
-    jupyter: { 
-        bg: "from-orange-500/15 to-amber-500/5", 
-        border: "border-orange-500/25", 
-        text: "text-orange-300"
+    // jupyter: #F37626, pushed gold to clear swift
+    jupyter: {
+        bg: "from-amber-500/15 to-orange-600/5",
+        border: "border-amber-500/25",
+        text: "text-amber-300"
     },
     // sqlite: #003B57 dark navy blue
     sqlite: { 

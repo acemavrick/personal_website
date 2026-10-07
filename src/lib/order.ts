@@ -1,14 +1,16 @@
 import type { CollectionEntry } from 'astro:content';
 import { ordering } from '../config';
+import { PRESENT } from './date';
 
 type Project = CollectionEntry<'projects'>;
 
 export const slugOf = (p: Project) => p.id.replace(/\.mdx?$/, '');
 
-/** "2025-09" -> 202509; undated -> -1 so it sorts last */
+/** "2025-09" -> 202509; open-ended sorts first, undated last */
 const dateKey = (p: Project) => {
 	const d = p.data.date;
 	if (!d) return -1;
+	if (d.to === PRESENT) return Number.MAX_SAFE_INTEGER;
 	return Number((d.to ?? d.from).replace('-', ''));
 };
 

@@ -8,6 +8,12 @@ const { name, pfp, taglines, links } = site;
 
 // new tab for everything but mail, résumé PDF included
 const opensNewTab = (href: string) => !href.startsWith('mailto');
+
+// one 3-wide grid so all six cells share a width; the tier only changes styling
+const quickLinks = [
+	...links.primary.map((l) => ({ ...l, primary: true })),
+	...links.secondary.map((l) => ({ ...l, primary: false })),
+];
 ---
 
 <section class="flex justify-center pt-16 pb-20">
@@ -34,7 +40,7 @@ const opensNewTab = (href: string) => !href.startsWith('mailto');
 		<p id="tagline" class="fade-up delay-2 text-lg text-neutral-300 tracking-wide max-w-xl text-center leading-relaxed">{taglines[0]}</p>
 		<script is:inline define:vars={{ taglines }}>
 			(function () {
-				// for a daily variant instead:
+				// for a daily variant:
 				// var i = Math.floor(Date.now() / 86400000) % taglines.length;
 				var i = Math.floor(Math.random() * taglines.length);
 				if (i > 0) document.getElementById('tagline').textContent = taglines[i];
@@ -44,38 +50,22 @@ const opensNewTab = (href: string) => !href.startsWith('mailto');
 			})();
 		</script>
 
-		<!-- quick links: accented professional row, bare personal row -->
-		<nav class="fade-up delay-3 flex flex-col items-center gap-3 mt-5" aria-label="Quick links">
-			<ul class="flex flex-wrap justify-center gap-3">
-				{links.primary.map(({ href, handle, icon }) => (
-					<li>
-						<a
-							href={href}
-							target={opensNewTab(href) ? '_blank' : undefined}
-							rel={opensNewTab(href) ? 'noopener noreferrer' : undefined}
-							class="quick-link flex items-center gap-2 rounded-xl border border-white/15 bg-white/8 px-4 py-2.5 backdrop-blur-sm transition-all duration-300"
-						>
-							<Icon name={icon} class="size-4 text-neutral-200" />
-							<span class="text-sm font-medium text-neutral-100">{handle}</span>
-						</a>
-					</li>
-				))}
-			</ul>
-
-			<ul class="flex flex-wrap justify-center gap-3">
-				{links.secondary.map(({ href, handle, icon }) => (
+		<!-- quick links: even 3-wide grid, personal row quieter than professional -->
+		<nav class="fade-up delay-3 mt-5 w-full max-w-lg" aria-label="Quick links">
+			<ul class="grid grid-cols-3 gap-2 sm:gap-3">
+				{quickLinks.map(({ href, handle, icon, primary }) => (
 					<li>
 						<a
 							href={href}
 							target={opensNewTab(href) ? '_blank' : undefined}
 							rel={opensNewTab(href) ? 'noopener noreferrer' : undefined}
 							class:list={[
-								"bare-link flex items-center gap-1.5 rounded-lg px-2 py-1 transition-all duration-300",
-								`brand-${icon.split(':')[1]}`
+								"quick-link flex w-full items-center justify-center gap-2 rounded-xl border px-2 py-2.5 backdrop-blur-sm transition-all duration-300 sm:px-4",
+								primary ? "accent" : "quiet"
 							]}
 						>
-							<Icon name={icon} class="size-3.5" />
-							<span class="text-xs text-neutral-400">{handle}</span>
+							<Icon name={icon} class="size-4 shrink-0" />
+							<span class="truncate text-xs font-medium sm:text-sm">{handle}</span>
 						</a>
 					</li>
 				))}
@@ -115,28 +105,31 @@ const opensNewTab = (href: string) => !href.startsWith('mailto');
 		transform: scale(1.02);
 	}
 
-	/* top row: filled, bordered, lifts on hover */
-	.quick-link {
+	/* the rows differ only in brightness */
+	.quick-link.accent {
+		border-color: rgba(255, 255, 255, 0.2);
+		background: rgba(255, 255, 255, 0.1);
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+		color: rgb(250 250 250);
 	}
 
-	.quick-link:hover {
+	.quick-link.accent:hover {
 		transform: translateY(-3px);
-		background: rgba(255, 255, 255, 0.12);
-		border-color: rgba(16, 185, 129, 0.35);
+		border-color: rgba(255, 255, 255, 0.35);
+		background: rgba(255, 255, 255, 0.16);
 		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 	}
 
-	/* bottom row: no chrome - brand hue alone keeps each one identifiable */
-	.brand-mail :global(svg) { color: #34d399; }
-	.brand-instagram :global(svg) { color: #e1306c; }
-	.brand-youtube :global(svg) { color: #ff0000; }
-
-	.bare-link:hover span {
-		color: rgb(229 229 229);
+	/* same cell, dimmer and no lift */
+	.quick-link.quiet {
+		border-color: rgba(255, 255, 255, 0.08);
+		background: rgba(255, 255, 255, 0.03);
+		color: rgb(150 150 150);
 	}
 
-	.bare-link:hover {
-		background: rgba(255, 255, 255, 0.05);
+	.quick-link.quiet:hover {
+		background: rgba(255, 255, 255, 0.07);
+		border-color: rgba(255, 255, 255, 0.16);
+		color: rgb(229 229 229);
 	}
 </style>

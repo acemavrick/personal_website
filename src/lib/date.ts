@@ -1,3 +1,6 @@
+/** sentinel `to` value meaning the project is still running */
+export const PRESENT = "0000-00";
+
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /** "2025-09" -> "Sep 2025" */
@@ -6,9 +9,10 @@ const label = (month: string) => {
 	return `${MONTHS[Number(m) - 1]} ${year}`;
 };
 
-/** no `to` means a single month, not an open-ended range */
+/** no `to` means a single month; PRESENT means open-ended */
 export function formatRange(date?: { from: string; to?: string }): string | undefined {
 	if (!date) return undefined;
+	if (date.to === PRESENT) return `${label(date.from)} – present`;
 	if (!date.to || date.to === date.from) return label(date.from);
 
 	const [fromYear] = date.from.split('-');
