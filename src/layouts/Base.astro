@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { site } from "../config";
+import { site, tagline } from "../config";
 
 interface Props {
 	title: string;
@@ -14,7 +14,7 @@ interface Props {
 
 const {
 	title,
-	description = site.tagline,
+	description = tagline,
 	keywords = "Shubh Randeria, developer, software engineer, portfolio, Python, Swift, web development, GitHub",
 	author = site.name,
 	image = site.pfp,
@@ -86,9 +86,10 @@ const fullTitle = title === site.name ? title : `${title} | ${site.name}`;
 				name: site.name,
 				url: site.url,
 				image: absoluteImageURL,
-				sameAs: site.socials
-					.filter((s) => s.icon !== "mail")
-					.map((s) => s.href),
+				// sameAs wants canonical profile URLs - no mailto, no internal links
+				sameAs: [...site.links.primary, ...site.links.secondary]
+					.map((l) => l.href)
+					.filter((href) => href.startsWith("http")),
 				jobTitle: "Developer",
 				description: description,
 			})}

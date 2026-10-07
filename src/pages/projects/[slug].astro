@@ -2,10 +2,14 @@
 import Base from "../../layouts/Base.astro";
 import { getCollection, render } from "astro:content";
 import TechTag from "../../components/TechTag.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import { Icon } from "astro-icon/components";
 import { site } from "../../config";
+import { formatRange } from "../../lib/date";
 
 export async function getStaticPaths() {
-    const projects = await getCollection("projects");
+    // only projects with a writeup get a page
+    const projects = await getCollection("projects", ({ data }) => data.writeup);
 
     return projects.map((proj) => ({
         params: { slug: proj.id.replace(/\.mdx?$/, "") },
@@ -15,7 +19,8 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { data } = project;
-const { Content } = await render(project);
+const { Content, headings } = await render(project);
+const range = formatRange(data.date);
 ---
 
 <Base 
@@ -47,6 +52,23 @@ const { Content } = await render(project);
                 {data.tech.toSorted((a, b) => a.localeCompare(b)).map((tech) => <TechTag {tech} />)}
             </div>
             <p class="text-lg text-neutral-200 leading-relaxed">{data.summary}</p>
+            {(range || data.links.site || data.links.repo) && (
+                <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+                    {range && <time class="font-mono text-xs text-neutral-500">{range}</time>}
+                    {data.links.site && (
+                        <a href={data.links.site} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-neutral-400 transition-colors hover:text-emerald-400">
+                            <Icon name="lucide:external-link" class="size-3.5" />
+                            <span>Site</span>
+                        </a>
+                    )}
+                    {data.links.repo && (
+                        <a href={data.links.repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-neutral-400 transition-colors hover:text-emerald-400">
+                            <Icon name="simple-icons:github" class="size-3.5" />
+                            <span>Repo</span>
+                        </a>
+                    )}
+                </div>
+            )}
             <div class="w-20 h-px bg-linear-to-r from-emerald-500/60 via-blue-500/30 to-pink-500/20 mt-2"></div>
         </header>
 
@@ -54,4 +76,6 @@ const { Content } = await render(project);
             <Content />
         </section>
     </article>
+
+    <TableOfContents headings={headings} />
 </Base>
